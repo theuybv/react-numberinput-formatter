@@ -3,13 +3,18 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.6.0",
     "@types/jest": "24.0.22",
     "@types/node": "12.12.6",
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
+    "@types/react-form": "^2.16.2",
+    "material-design-icons": "^3.0.1",
     "react": "^16.11.0",
     "react-dom": "^16.11.0",
+    "react-form": "^4.0.0-alpha.14",
     "react-scripts": "3.2.0",
+    "typeface-roboto": "0.0.75",
     "typescript": "3.7.2"
   },
   "scripts": {
