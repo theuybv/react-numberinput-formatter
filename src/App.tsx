@@ -28,14 +28,14 @@ function testValidNumber(value: string, decimalScale?: number) {
   return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
 }
 
-const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, useGrouping, ...props }) => {
-  const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits }) : '');
+const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
+  const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
 
   useEffect(() => {
     if (props.value !== '' && typeof props.value !== 'undefined') {
-      setValue(format(props.value, { useGrouping, maximumFractionDigits }));
+      setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
     }
-  }, [props.value, useGrouping, maximumFractionDigits]);
+  }, [props.value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
     const isValid = testValidNumber(e.target.value, maximumFractionDigits);
@@ -48,14 +48,14 @@ const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, maxi
   }, [onChange, maximumFractionDigits]);
 
   const handleBlur = useCallback((e: FormEvent<HTMLInputElement>) => {
-    value !== '' && setValue(format(toFloat(value), { useGrouping, maximumFractionDigits }));
+    value !== '' && setValue(format(toFloat(value), { useGrouping, maximumFractionDigits, minimumFractionDigits }));
     onBlur(e);
-  }, [onBlur, value, useGrouping, maximumFractionDigits]);
+  }, [onBlur, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
   const handleFocus = useCallback((e: FormEvent<HTMLInputElement>) => {
-    value !== '' && useGrouping && setValue(format(toFloat(value), { useGrouping: false, maximumFractionDigits }));
+    value !== '' && useGrouping && setValue(format(toFloat(value), { useGrouping: false, maximumFractionDigits, minimumFractionDigits }));
     onFocus(e);
-  }, [onFocus, value, useGrouping, maximumFractionDigits]);
+  }, [onFocus, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
   return <input {...props} value={value || ''} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
 };
@@ -66,12 +66,13 @@ NumericInput.defaultProps = {
 
 type NumericTextFieldProps = Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & {
   maximumFractionDigits?: number,
+  minimumFractionDigits?: number,
   useGrouping?: boolean,
   value?: number | string,
   onChange?: (e: ChangeEvent<HTMLInputElement> & { target: { value?: number } }) => void
 }
 
-const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigits, useGrouping, InputProps, ...props }) => {
+const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigits, minimumFractionDigits, useGrouping, InputProps, ...props }) => {
   return (
     <TextField
       variant="outlined"
@@ -82,6 +83,7 @@ const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigi
         inputComponent: NumericInput,
         inputProps: {
           maximumFractionDigits,
+          minimumFractionDigits,
           useGrouping,
           pattern: '\\d*',
           ...InputProps ? InputProps.inputProps : {}
@@ -91,7 +93,7 @@ const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigi
   )
 }
 
-type CurrencyTextFieldProps = Omit<NumericTextFieldProps, 'maximumFractionDigits' | 'useGrouping'>
+type CurrencyTextFieldProps = Omit<NumericTextFieldProps, 'maximumFractionDigits' | 'minimumFractionDigits' | 'useGrouping'>
 
 const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...props }) => {
   return (
@@ -99,6 +101,7 @@ const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...pr
       {...props}
       useGrouping={true}
       maximumFractionDigits={2}
+      minimumFractionDigits={2}
       InputProps={{
         startAdornment: <InputAdornment position="start">&euro;</InputAdornment>,
         ...InputProps
