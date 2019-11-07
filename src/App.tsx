@@ -1,101 +1,76 @@
 import React, { useCallback, ChangeEvent, FormEvent, useState, useEffect } from 'react';
 import { Box, TextField } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
+import numeral from 'numeral';
+import 'numeral/locales/nl-nl.js';
 
-const ValidatedInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, ...props }) => {
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    console.log('validate', e.target.value);
-    onChange(e);
-  }, [onChange]);
-  const handleBlur = useCallback((e: FormEvent<HTMLInputElement>) => {
-    console.log('blur validate');
-    onBlur(e);
-  }, [onBlur]);
-  const handleFocus = useCallback((e: FormEvent<HTMLInputElement>) => {
-    console.log('focus validate');
-    onFocus(e);
-  }, [onFocus]);
-  return <input {...props} ref={inputRef} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} />
-}
+numeral.locale('nl-nl');
 
-const decimalSeperator = ',';
-const thousandSeparator = '.';
-const thousandSeparatorRegex = new RegExp('\\' + thousandSeparator, 'g');
-const decimalSeperatorRegex = new RegExp('\\' + decimalSeperator, 'g');
+const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, decimalScale, ...props }) => {
+  const [value, setValue] = useState(props.value || '');
 
-const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, ...props }) => {
-  const [value, setValue] = useState(props.value);
   useEffect(() => {
-    setValue(props.value);
-  }, [props.value]);
+    props.value !== '' && typeof props.value !== 'undefined' && setValue(numeral(props.value).format('0.[' + '0'.repeat(decimalScale) + ']'));
+  }, [props.value, decimalScale]);
+
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    // TODO: locale parsing...
-    const parsed = e.target.value.replace(thousandSeparatorRegex, '').replace(decimalSeperatorRegex, '.');
-    console.log(parsed);
-    const number = parseFloat(parsed);
-    if (!isNaN(number) || e.target.value === '') {
+    const regex = new RegExp('^-?\\d*[,.]?\\d{0,' + decimalScale + '}$');
+    const isNumber = regex.test(e.target.value);
+    if (isNumber || e.target.value === '') {
       setValue(e.target.value);
-      onChange({ ...e, target: { ...e.target, floatValue: isNaN(number) ? '' : number } });
+      const newEvent = { ...e, target: { ...e.target, floatValue: isNumber ? numeral(e.target.value).value() : undefined } };
+      onChange(newEvent);
     }
-  }, [onChange]);
+  }, [onChange, decimalScale]);
+
   const handleBlur = useCallback((e: FormEvent<HTMLInputElement>) => {
-    console.log('blur numeric', value);
-    const parsed = value.replace(thousandSeparatorRegex, '').replace(decimalSeperatorRegex, '.');
-    console.log(parsed);
-    const number = parseFloat(parsed);
-    console.log(number);
-    setValue(number.toLocaleString());
+    value !== '' && setValue(numeral(value).format('0,0.[' + '0'.repeat(decimalScale) + ']'));
     onBlur(e);
-  }, [onBlur, value]);
+  }, [onBlur, value, decimalScale]);
+
   const handleFocus = useCallback((e: FormEvent<HTMLInputElement>) => {
-    console.log('focus numeric');
+    value !== '' && setValue(numeral(value).format('0.[' + '0'.repeat(decimalScale) + ']'));
     onFocus(e);
-  }, [onFocus]);
+  }, [onFocus, value, decimalScale]);
+
   return <input {...props} value={value || ''} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
 };
 
-const CustomTextField: React.FC<Omit<TextFieldProps, 'variant'>> = (props) => {
+NumericInput.defaultProps = {
+  decimalScale: 2
+}
+
+const NumericTextField: React.FC<Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & { decimalScale?: number, value?: number, onChange?: (e: ChangeEvent<HTMLInputElement> & { target: { value: string, floatValue?: number } }) => void }> = ({ decimalScale, InputProps, ...props }) => {
   return (
     <TextField
       variant="outlined"
       margin="normal"
       {...props}
       InputProps={{
-        inputComponent: ValidatedInput,
-        ...props.InputProps
-      }}
-    />
-  )
-}
-
-const NumericTextField: React.FC<Omit<TextFieldProps, 'variant'>> = (props) => {
-  return (
-    <CustomTextField
-      {...props}
-      InputProps={{
+        ...InputProps,
         inputComponent: NumericInput,
         inputProps: {
-          pattern: '\\d*'
-        },
-        ...props.InputProps
+          decimalScale,
+          pattern: '\\d*',
+          ...InputProps ? InputProps.inputProps : {}
+        }
       }}
-
     />
   )
 }
 
 const App: React.FC = () => {
-  const [number, setNumber] = useState(15 as number | string);
+  const [number, setNumber] = useState(15 as number | undefined);
+  useEffect(() => {
+    console.log('number changed', number);
+  }, [number]);
   return (
     <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
-      <CustomTextField
-        label="Letters!"
-        onChange={e => console.log('chain', e.target.value)}
-      />
       <NumericTextField
         label="Nummers!"
-        onChange={e => setNumber(e.target.value)}
+        onChange={e => setNumber(e.target.floatValue || undefined)}
         value={number}
+        decimalScale={3}
       />
     </Box>
   );
