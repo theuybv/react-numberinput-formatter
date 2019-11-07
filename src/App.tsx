@@ -6,7 +6,7 @@ import 'numeral/locales/nl-nl.js';
 
 numeral.locale('nl-nl');
 
-const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, decimalScale, ...props }) => {
+const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, decimalScale, showThousandSeparator, format, ...props }) => {
   const [value, setValue] = useState(props.value || '');
 
   useEffect(() => {
@@ -24,9 +24,9 @@ const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, deci
   }, [onChange, decimalScale]);
 
   const handleBlur = useCallback((e: FormEvent<HTMLInputElement>) => {
-    value !== '' && setValue(numeral(value).format('0,0.[' + '0'.repeat(decimalScale) + ']'));
+    value !== '' && setValue(numeral(value).format((showThousandSeparator ? '0,' : '') + '0.[' + '0'.repeat(decimalScale) + ']'));
     onBlur(e);
-  }, [onBlur, value, decimalScale]);
+  }, [onBlur, value, decimalScale, showThousandSeparator]);
 
   const handleFocus = useCallback((e: FormEvent<HTMLInputElement>) => {
     value !== '' && setValue(numeral(value).format('0.[' + '0'.repeat(decimalScale) + ']'));
@@ -37,10 +37,11 @@ const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, deci
 };
 
 NumericInput.defaultProps = {
-  decimalScale: 2
+  decimalScale: 2,
+  showThousandSeparator: false
 }
 
-const NumericTextField: React.FC<Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & { decimalScale?: number, value?: number, onChange?: (e: ChangeEvent<HTMLInputElement> & { target: { value: string, floatValue?: number } }) => void }> = ({ decimalScale, InputProps, ...props }) => {
+const NumericTextField: React.FC<Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & { decimalScale?: number, showThousandSeparator?: boolean, value?: number, onChange?: (e: ChangeEvent<HTMLInputElement> & { target: { value: string, floatValue?: number } }) => void }> = ({ decimalScale, showThousandSeparator, InputProps, ...props }) => {
   return (
     <TextField
       variant="outlined"
@@ -51,6 +52,7 @@ const NumericTextField: React.FC<Omit<TextFieldProps, 'variant' | 'onChange' | '
         inputComponent: NumericInput,
         inputProps: {
           decimalScale,
+          showThousandSeparator,
           pattern: '\\d*',
           ...InputProps ? InputProps.inputProps : {}
         }
@@ -60,17 +62,13 @@ const NumericTextField: React.FC<Omit<TextFieldProps, 'variant' | 'onChange' | '
 }
 
 const App: React.FC = () => {
-  const [number, setNumber] = useState(15 as number | undefined);
-  useEffect(() => {
-    console.log('number changed', number);
-  }, [number]);
   return (
     <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
       <NumericTextField
         label="Nummers!"
-        onChange={e => setNumber(e.target.floatValue || undefined)}
-        value={number}
+        onChange={e => console.log(e.target.floatValue)}
         decimalScale={3}
+        showThousandSeparator={true}
       />
     </Box>
   );
