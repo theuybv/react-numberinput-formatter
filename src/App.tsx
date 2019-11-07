@@ -38,8 +38,8 @@ const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, maxi
   }, [props.value, useGrouping, maximumFractionDigits]);
 
   const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const isNumber = testValidNumber(e.target.value, maximumFractionDigits);
-    if (isNumber || e.target.value === '') {
+    const isValid = testValidNumber(e.target.value, maximumFractionDigits);
+    if (isValid || e.target.value === '') {
       setValue(e.target.value);
       const numberValue = toFloat(e.target.value);
       const newEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : undefined } };
