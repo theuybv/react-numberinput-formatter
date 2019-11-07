@@ -1,5 +1,5 @@
 import React, { useCallback, ChangeEvent, FormEvent, useState, useEffect } from 'react';
-import { Box, TextField, InputAdornment } from '@material-ui/core';
+import { Box, TextField, InputAdornment, Button } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 
 let formatter: Intl.NumberFormat, thousandSeparatorRegex: RegExp, decimalSeparatorRegex: RegExp, decimalSeparator: string;
@@ -34,6 +34,8 @@ const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, maxi
   useEffect(() => {
     if (props.value !== '' && typeof props.value !== 'undefined') {
       setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
+    } else {
+      setValue('');
     }
   }, [props.value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
@@ -111,7 +113,7 @@ const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...pr
 }
 
 const App: React.FC = () => {
-  const [value, setValue] = useState(10);
+  const [value, setValue] = useState(10 as number | undefined);
   return (
     <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
       <NumericTextField
@@ -123,6 +125,7 @@ const App: React.FC = () => {
         label="Bedrag!"
         onChange={e => console.log(e.target.value)}
       />
+      <Button onClick={() => setValue(undefined)}>Leeg maken!</Button>
     </Box>
   );
 }
