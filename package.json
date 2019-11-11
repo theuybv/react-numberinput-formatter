@@ -21,7 +21,7 @@
     "name": "Rense Bakker"
   },
   "scripts": {
-    "prepublish": "tsc"
+    "prepublishOnly": "tsc"
   },
   "publisher": "Theuy B.V.",
   "description": "A react input field with locale number formatting using Intl.NumberFormat",
@@ -29,7 +29,10 @@
   "types": "dist/index.d.ts",
   "version": "0.1.5",
   "private": false,
-  "peerDependency": {
+  "peerDependencies": {
+    "react": "^16.11.0"
+  },
+  "devDependencies": {
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
     "react": "^16.11.0",
