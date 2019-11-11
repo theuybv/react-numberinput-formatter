@@ -1,5 +1,20 @@
 {
   "name": "react-numberinput-formatter",
+  "contributors": [
+    {
+      "email": "b.rense@gmail.com",
+      "name": "Rense Bakker"
+    },
+    {
+      "email": "info@theuy.nl",
+      "name": "Theuy Limpanont"
+    }
+  ],
+  "license": "MIT",
+  "author": {
+    "email": "b.rense@gmail.com",
+    "name": "Rense Bakker"
+  },
   "description": "A react input field with numeric formatting",
   "main": "index.js",
   "version": "0.1.0",
