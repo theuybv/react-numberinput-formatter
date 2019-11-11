@@ -1,5 +1,5 @@
 {
-  "name": "react-numeric-input",
+  "name": "react-numberinput-formatter",
   "description": "A react input field with numeric formatting",
   "main": "index.js",
   "version": "0.1.0",
