@@ -23,7 +23,7 @@
   "publisher": "Theuy B.V.",
   "description": "A react input field with locale number formatting using Intl.NumberFormat",
   "main": "index.js",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "private": false,
   "dependencies": {
     "@types/node": "12.12.6",
