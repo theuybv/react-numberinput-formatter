@@ -27,7 +27,7 @@
   "description": "A react input field with locale number formatting using Intl.NumberFormat",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "private": false,
   "peerDependencies": {
     "react": "^16.11.0"
