@@ -1,5 +1,5 @@
 # React Numeric Input
-#### A react input field with locale number formatting using  [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat){:target="_blank"}
+#### A react input field with locale number formatting using  [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
 
 
 ![Input Example](https://snipboard.io/nyeJE3.jpg)
