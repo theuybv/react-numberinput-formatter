@@ -1,5 +1,10 @@
 {
   "name": "react-numberinput-formatter",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/theuybv/react-numberinput-formatter.git"
+  },
+  "homepage": "https://github.com/theuybv/react-numberinput-formatter",
   "contributors": [
     {
       "email": "b.rense@gmail.com",
