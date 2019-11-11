@@ -1,78 +1,11 @@
-import React, { useCallback, ChangeEvent, FormEvent, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Box, TextField, InputAdornment, Button } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
-
-let formatter: Intl.NumberFormat, thousandSeparatorRegex: RegExp, decimalSeparatorRegex: RegExp, decimalSeparator: string;
-
-export const setLocale = (locale: any) => {
-  formatter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1, useGrouping: true });
-  const parts = formatter.formatToParts(1234.5);
-  decimalSeparator = parts[3].value;
-  thousandSeparatorRegex = new RegExp('\\' + parts[1].value, 'g');
-  decimalSeparatorRegex = new RegExp('\\' + decimalSeparator, 'g');
-}
+import { NumericInput, NumericProps, setLocale } from './NumberFormat';
 
 setLocale('nl');
 
-export function format(value: number, options?: Intl.NumberFormatOptions) {
-  const { locale, ...oldOptions } = formatter.resolvedOptions();
-  const maximumFractionDigits = (options && options.maximumFractionDigits) ? options.maximumFractionDigits : 20;
-  return new Intl.NumberFormat(locale, { ...oldOptions, ...options, maximumFractionDigits }).format(value);
-}
-
-function toFloat(value: string) {
-  return parseFloat(value.replace(thousandSeparatorRegex, '').replace(decimalSeparatorRegex, '.'));
-}
-
-function testValidNumber(value: string, decimalScale?: number) {
-  return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
-}
-
-const NumericInput: React.FC<any> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
-  const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
-
-  useEffect(() => {
-    if (props.value !== '' && typeof props.value !== 'undefined') {
-      setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
-    } else {
-      setValue('');
-    }
-  }, [props.value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
-
-  const handleChange = useCallback((e: ChangeEvent<HTMLInputElement>) => {
-    const isValid = testValidNumber(e.target.value, maximumFractionDigits);
-    if (isValid || e.target.value === '') {
-      setValue(e.target.value);
-      const numberValue = toFloat(e.target.value);
-      const newEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : undefined } };
-      onChange(newEvent);
-    }
-  }, [onChange, maximumFractionDigits]);
-
-  const handleBlur = useCallback((e: FormEvent<HTMLInputElement>) => {
-    value !== '' && setValue(format(toFloat(value), { useGrouping, maximumFractionDigits, minimumFractionDigits }));
-    onBlur(e);
-  }, [onBlur, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
-
-  const handleFocus = useCallback((e: FormEvent<HTMLInputElement>) => {
-    value !== '' && useGrouping && setValue(format(toFloat(value), { useGrouping: false, maximumFractionDigits, minimumFractionDigits }));
-    onFocus(e);
-  }, [onFocus, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
-
-  return <input {...props} value={value || ''} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
-};
-
-NumericInput.defaultProps = {
-  useGrouping: false
-}
-
-type NumericTextFieldProps = Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & {
-  maximumFractionDigits?: number,
-  minimumFractionDigits?: number,
-  useGrouping?: boolean,
-  value?: number | string,
-  onChange?: (e: ChangeEvent<HTMLInputElement> & { target: { value?: number } }) => void
-}
+type NumericTextFieldProps = Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & NumericProps
 
 const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigits, minimumFractionDigits, useGrouping, InputProps, ...props }) => {
   return (
@@ -82,7 +15,7 @@ const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigi
       {...props}
       InputProps={{
         ...InputProps,
-        inputComponent: NumericInput,
+        inputComponent: NumericInput as any,
         inputProps: {
           maximumFractionDigits,
           minimumFractionDigits,
