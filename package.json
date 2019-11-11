@@ -29,13 +29,10 @@
   "types": "dist/index.d.ts",
   "version": "0.1.4",
   "private": false,
-  "dependencies": {
-    "@types/node": "12.12.6",
+  "peerDependency": {
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.3",
     "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "react-scripts": "3.2.0",
-    "typescript": "3.7.2"
+    "react-dom": "^16.11.0"
   }
 }
