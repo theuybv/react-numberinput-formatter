@@ -4,7 +4,7 @@
 
 ![Input Example](https://snipboard.io/nyeJE3.jpg)
 
-### Storybook 
+### Interactive examples 
 
 [![Badge](https://github.com/storybookjs/brand/raw/master/badge/badge-storybook.svg?sanitize=true)](https://theuybv.github.io/react-numberinput-formatter)
 
