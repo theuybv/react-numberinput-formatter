@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NumericInput, { setLocale, NumericProps} from 'react-numberinput-formatter/src';
+import NumericInput, { setLocale, NumericProps} from './NumericInput';
 import { TextField, InputAdornment, Box } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 

@@ -1,83 +1,15 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { Fragment } from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
+import App from './App';
+import * as serviceWorker from './serviceWorker';
+import 'typeface-roboto';
+import 'material-design-icons/iconfont/material-icons.css';
+import { CssBaseline } from '@material-ui/core';
 
-let formatter: Intl.NumberFormat, thousandSeparatorRegex: RegExp, decimalSeparatorRegex: RegExp, decimalSeparator: string;
+ReactDOM.render(<Fragment><CssBaseline /><App /></Fragment>, document.getElementById('root'));
 
-export const setLocale = (locale: any) => {
-  formatter = new Intl.NumberFormat(locale, { maximumFractionDigits: 1, useGrouping: true });
-  const parts = formatter.formatToParts(1234.5);
-  decimalSeparator = parts[3].value;
-  thousandSeparatorRegex = new RegExp('\\' + parts[1].value, 'g');
-  decimalSeparatorRegex = new RegExp('\\' + decimalSeparator, 'g');
-}
-
-setLocale('en-US');
-
-export function format(value: number, options?: Intl.NumberFormatOptions) {
-  const { locale, ...oldOptions } = formatter.resolvedOptions();
-  const maximumFractionDigits = (options && options.maximumFractionDigits) ? options.maximumFractionDigits : 20;
-  return new Intl.NumberFormat(locale, { ...oldOptions, ...options, maximumFractionDigits }).format(value);
-}
-
-function toFloat(value: string) {
-  return parseFloat(value.replace(thousandSeparatorRegex, '').replace(decimalSeparatorRegex, '.'));
-}
-
-function testValidNumber(value: string, decimalScale?: number) {
-  return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
-}
-
-export type NumericProps = {
-  maximumFractionDigits?: number,
-  minimumFractionDigits?: number,
-  useGrouping?: boolean,
-  value?: number | string,
-  onChange?: (e: React.ChangeEvent<HTMLInputElement> & { target: { value?: number } }) => void
-}
-
-export type NumericInputProps = {
-  maximumFractionDigits: number,
-  minimumFractionDigits: number,
-  useGrouping: boolean,
-  value: number,
-  inputRef: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
-} & Omit<React.HTMLProps<HTMLInputElement>, 'value'>
-
-const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
-  const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
-
-  useEffect(() => {
-    if (props.value + '' !== '' && typeof props.value !== 'undefined') {
-      setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
-    } else {
-      setValue('');
-    }
-  }, [props.value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
-
-  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-    const isValid = testValidNumber(e.target.value, maximumFractionDigits);
-    if (isValid || e.target.value === '') {
-      setValue(e.target.value);
-      const numberValue = toFloat(e.target.value);
-      const newEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : undefined } };
-      onChange && onChange(newEvent);
-    }
-  }, [onChange, maximumFractionDigits]);
-
-  const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    value !== '' && setValue(format(toFloat(value), { useGrouping, maximumFractionDigits, minimumFractionDigits }));
-    onBlur && onBlur(e);
-  }, [onBlur, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
-
-  const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
-    value !== '' && useGrouping && setValue(format(toFloat(value), { useGrouping: false, maximumFractionDigits, minimumFractionDigits }));
-    onFocus && onFocus(e);
-  }, [onFocus, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
-
-  return <input {...props} value={value || ''} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
-};
-
-NumericInput.defaultProps = {
-  useGrouping: false
-}
-
-export default NumericInput;
+// If you want your app to work offline and load faster, you can change
+// unregister() to register() below. Note this comes with some pitfalls.
+// Learn more about service workers: https://bit.ly/CRA-PWA
+serviceWorker.unregister();

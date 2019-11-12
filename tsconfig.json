@@ -1,20 +1,25 @@
 {
   "compilerOptions": {
-    "target": "esnext",
-    "module": "commonjs",
-    "jsx": "react",
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    "outDir": "lib-esm",
+    "target": "es5",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
     "strict": true,
-    "esModuleInterop": true
+    "forceConsistentCasingInFileNames": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react"
   },
   "include": [
     "src"
-  ],
-  "exclude": [
-    "node_modules",
-    "demo"
   ]
 }
