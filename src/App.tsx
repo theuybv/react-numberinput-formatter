@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import NumericInput, { setLocale, NumericProps} from './NumericInput';
-import { TextField, InputAdornment, Box } from '@material-ui/core';
+import NumericInput, { setLocale, NumericProps } from './NumericInput';
+import { TextField, InputAdornment, Box, Button } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 
 setLocale('nl');
@@ -46,7 +46,7 @@ const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...pr
 }
 
 const App: React.FC = () => {
-  const [value, setValue] = useState(10 as number | undefined);
+  const [value, setValue] = useState(10 as number | '');
   return (
     <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
       <NumericTextField
@@ -58,6 +58,7 @@ const App: React.FC = () => {
         label="Currency"
         onChange={e => console.log(e.target.value)}
       />
+      <Button onClick={() => setValue('')}>Leeg maken</Button>
     </Box>
   );
 }

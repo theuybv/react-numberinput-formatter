@@ -46,12 +46,13 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
   const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
 
   useEffect(() => {
-    if (props.value + '' !== '' && typeof props.value !== 'undefined') {
+    const floatValue = parseFloat(value);
+    if (!isNaN(floatValue) && floatValue !== 0 && floatValue !== props.value && props.value + '' !== '' && typeof props.value !== 'undefined') {
       setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
-    } else {
+    } else if (typeof props.value !== 'undefined' && props.value + '' === '') {
       setValue('');
     }
-  }, [props.value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
+  }, [props.value, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const stringValue = e.target.value.replace('.', decimalSeparator);
@@ -59,8 +60,10 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
     if (isValid || stringValue === '') {
       setValue(stringValue);
       const numberValue = toFloat(e.target.value);
-      const newEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : undefined } };
-      onChange && onChange(newEvent);
+      if (numberValue && !isNaN(numberValue)) {
+        const newEvent = { ...e, target: { ...e.target, value: numberValue } };
+        onChange && onChange(newEvent);
+      }
     }
   }, [onChange, maximumFractionDigits]);
 
@@ -74,7 +77,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
     onFocus && onFocus(e);
   }, [onFocus, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
-  return <input {...props} value={value || ''} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
+  return <input {...props} value={value} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
 };
 
 NumericInput.defaultProps = {
