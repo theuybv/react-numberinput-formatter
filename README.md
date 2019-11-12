@@ -6,8 +6,8 @@
 
 ### Storybook 
 
-![Badge](https://github.com/storybookjs/brand/raw/master/badge/badge-storybook.svg?sanitize=true)
-https://theuybv.github.io/react-numberinput-formatter 
+[![Badge](https://github.com/storybookjs/brand/raw/master/badge/badge-storybook.svg?sanitize=true)](https://theuybv.github.io/react-numberinput-formatter)
+
 
 
 ### Code Example
