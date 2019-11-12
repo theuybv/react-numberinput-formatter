@@ -6,6 +6,10 @@
       "dom.iterable",
       "esnext"
     ],
+    "baseUrl": "src",
+    "paths": {
+      "react-numberinput-formatter/*": ["../*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
