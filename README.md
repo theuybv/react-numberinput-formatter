@@ -1,5 +1,5 @@
 # React Numeric Input
-#### A react input field with locale number formatting using  [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
+#### Number locale formatting using [Intl.NumberFormat](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/NumberFormat)
 
 
 ![Input Example](https://snipboard.io/nyeJE3.jpg)
@@ -52,6 +52,27 @@ const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...pr
       }}
     />
   )
+}
+
+const FormattedNumber: React.FC<{ value: number, options?: Intl.NumberFormatOptions }> = ({ value, options }) => <span>{format(value, options)}</span>
+
+const App: React.FC = () => {
+  const [value, setValue] = useState(10 as number | '');
+  return (
+    <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
+      <FormattedNumber value={value || 0} options={{ maximumFractionDigits: 3, useGrouping: false }} />
+      <NumericTextField
+        label="Numbers"
+        value={value || ''}
+        onChange={e => setValue(e.target.value)}
+      />
+      <CurrencyTextField
+        label="Currency"
+        onChange={e => console.log(e.target.value)}
+      />
+      <Button onClick={() => setValue('')}>Leeg maken</Button>
+    </Box>
+  );
 }
 ```
 
