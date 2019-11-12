@@ -21,12 +21,13 @@
     "name": "Rense Bakker"
   },
   "scripts": {
+    "start": "npm start --prefix demo/",
     "prepublishOnly": "tsc"
   },
   "publisher": "Theuy B.V.",
   "description": "A react input field with locale number formatting using Intl.NumberFormat",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "lib-esm/index.js",
+  "types": "lib-esm/index.d.ts",
   "version": "0.1.6",
   "private": false,
   "peerDependencies": {

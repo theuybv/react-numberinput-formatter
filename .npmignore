@@ -10,3 +10,10 @@
 config.gypi
 CVS
 npm-debug.log
+.editorconfig
+.gitignore
+.npmignore
+tsconfig*.json
+demo/
+docs/
+src/
