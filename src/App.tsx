@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import NumericInput, { setLocale, NumericProps } from './NumericInput';
+import NumericInput, { setLocale, NumericProps, format } from './NumericInput';
 import { TextField, InputAdornment, Box, Button } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
 
@@ -45,10 +45,13 @@ const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...pr
   )
 }
 
+const FormattedNumber: React.FC<{ value: number, options?: Intl.NumberFormatOptions }> = ({ value, options }) => <span>{format(value, options)}</span>
+
 const App: React.FC = () => {
   const [value, setValue] = useState(10 as number | '');
   return (
     <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
+      <FormattedNumber value={value || 0} options={{ maximumFractionDigits: 3, useGrouping: false }} />
       <NumericTextField
         label="Numbers"
         value={value || ''}
