@@ -26,29 +26,26 @@ function testValidNumber(value: string, decimalScale?: number) {
   return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
 }
 
-export type NumericProps = {
-  maximumFractionDigits?: number,
-  minimumFractionDigits?: number,
-  useGrouping?: boolean,
-  value?: number | string,
-  onChange?: (e: React.ChangeEvent<HTMLInputElement> & { target: { value?: number } }) => void
+export interface HTMLNumericInputElement extends Omit<HTMLInputElement, 'value'> {
+  value?: number | ''
 }
 
 export type NumericInputProps = {
-  maximumFractionDigits: number,
-  minimumFractionDigits: number,
-  useGrouping: boolean,
-  value: number,
-  inputRef: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
-} & Omit<React.HTMLProps<HTMLInputElement>, 'value'>
+  maximumFractionDigits?: number,
+  minimumFractionDigits?: number,
+  useGrouping?: boolean,
+  value?: number | '',
+  inputRef?: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
+  onChange?: (e: React.ChangeEvent<HTMLNumericInputElement>) => void
+}
 
-const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
+const NumericInput: React.FC<NumericInputProps & React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement>> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
   const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
 
   useEffect(() => {
     const floatValue = parseFloat(value);
     if (!isNaN(floatValue) && floatValue !== 0 && floatValue !== props.value && props.value + '' !== '' && typeof props.value !== 'undefined') {
-      setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
+      setValue(format(props.value !== '' ? props.value : 0, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
     } else if (typeof props.value !== 'undefined' && props.value + '' === '') {
       setValue('');
     }
@@ -60,9 +57,9 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
     if (isValid || stringValue === '') {
       setValue(stringValue);
       const numberValue = toFloat(e.target.value);
-      if (numberValue && !isNaN(numberValue)) {
-        const newEvent = { ...e, target: { ...e.target, value: numberValue } };
-        onChange && onChange(newEvent);
+      if (typeof numberValue !== 'undefined' && (!isNaN(numberValue) || stringValue === '')) {
+        const newEvent = { ...e, target: { ...e.target as HTMLNumericInputElement, value: !isNaN(numberValue) ? numberValue : '' } };
+        onChange && onChange(newEvent as React.ChangeEvent<HTMLNumericInputElement>);
       }
     }
   }, [onChange, maximumFractionDigits]);
