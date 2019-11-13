@@ -4,13 +4,19 @@
 
 ![Input Example](https://snipboard.io/nyeJE3.jpg)
 
+### Interactive examples 
+
+[![Badge](https://github.com/storybookjs/brand/raw/master/badge/badge-storybook.svg?sanitize=true)](https://theuybv.github.io/react-numberinput-formatter)
+
+
+
 ### Code Example
 
 ```typescript
 import React from 'react';
 import { InputAdornment } from '@material-ui/core';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
-import NumericInput, { NumericProps, setLocale } from 'react-numeric-input';
+import NumericInput, { NumericProps, setLocale } from 'react-numberinput-formatter';
 
 setLocale('nl');
 
