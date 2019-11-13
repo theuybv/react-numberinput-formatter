@@ -56,6 +56,7 @@
   "devDependencies": {
     "@material-ui/core": "^4.6.0",
     "@storybook/addon-info": "^5.2.6",
+    "@storybook/addon-knobs": "^5.2.6",
     "@storybook/addon-notes": "^5.2.6",
     "@storybook/react": "^5.2.6",
     "@storybook/storybook-deployer": "^2.8.1",
@@ -64,12 +65,16 @@
     "@types/react": "16.9.11",
     "@types/react-dom": "16.9.4",
     "awesome-typescript-loader": "^5.2.1",
+    "highlight.js": "^9.16.2",
     "markdown-loader": "^5.1.0",
+    "marked": "^0.7.0",
     "material-design-icons": "^3.0.1",
     "react": "^16.11.0",
     "react-docgen-typescript-loader": "^3.3.0",
     "react-dom": "^16.11.0",
+    "react-prism": "^4.3.2",
     "react-scripts": "3.2.0",
+    "storybook-readme": "^5.0.8",
     "typeface-roboto": "0.0.75",
     "typescript": "3.7.2"
   }
