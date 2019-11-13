@@ -24,7 +24,7 @@
   "description": "A react input field with locale number formatting using Intl.NumberFormat",
   "main": "lib-esm/NumericInput.js",
   "types": "lib-esm/NumericInput.d.ts",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "private": false,
   "scripts": {
     "storybook": "start-storybook -p 9001 -c .storybook",
