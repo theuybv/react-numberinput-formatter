@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import NumericInput, { setLocale, NumericProps, format } from './NumericInput';
+import NumericInput, { setLocale, NumericInputProps, format } from './NumericInput';
 import { TextField, InputAdornment, Box, Button } from '@material-ui/core';
 import { TextFieldProps } from '@material-ui/core/TextField';
+import { InputBaseComponentProps } from '@material-ui/core/InputBase';
 
 setLocale('nl');
 
-type NumericTextFieldProps = Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & NumericProps
+type NumericTextFieldProps = Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & NumericInputProps
 
 export const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigits, minimumFractionDigits, useGrouping, InputProps, onChange, ...props }) => {
   return (
@@ -16,7 +17,7 @@ export const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFract
       {...props}
       InputProps={{
         ...InputProps,
-        inputComponent: NumericInput as any,
+        inputComponent: NumericInput as React.FC<InputBaseComponentProps>,
         inputProps: {
           maximumFractionDigits,
           minimumFractionDigits,

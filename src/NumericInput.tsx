@@ -26,36 +26,26 @@ function testValidNumber(value: string, decimalScale?: number) {
   return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
 }
 
-interface HTMLNumericInputElement extends Omit<HTMLInputElement, 'value'> {
+export interface HTMLNumericInputElement extends Omit<HTMLInputElement, 'value'> {
   value?: number | ''
 }
 
-type NumericInputChangeEvent = Omit<React.ChangeEvent<HTMLInputElement>, 'target'> & { target: HTMLNumericInputElement };
-
-export type NumericProps = {
+export type NumericInputProps = {
   maximumFractionDigits?: number,
   minimumFractionDigits?: number,
   useGrouping?: boolean,
-  value?: number | string,
-  onChange?: (e: NumericInputChangeEvent) => void
+  value?: number | '',
+  inputRef?: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
+  onChange?: (e: React.ChangeEvent<HTMLNumericInputElement>) => void
 }
 
-export type NumericInputProps = {
-  maximumFractionDigits: number,
-  minimumFractionDigits: number,
-  useGrouping: boolean,
-  value: number,
-  inputRef: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
-  onChange?: (e: NumericInputChangeEvent) => void
-} & Omit<React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'value' | 'onChange'>
-
-const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
+const NumericInput: React.FC<NumericInputProps & React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement>> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
   const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
 
   useEffect(() => {
     const floatValue = parseFloat(value);
     if (!isNaN(floatValue) && floatValue !== 0 && floatValue !== props.value && props.value + '' !== '' && typeof props.value !== 'undefined') {
-      setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
+      setValue(format(props.value !== '' ? props.value : 0, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
     } else if (typeof props.value !== 'undefined' && props.value + '' === '') {
       setValue('');
     }
@@ -68,8 +58,8 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
       setValue(stringValue);
       const numberValue = toFloat(e.target.value);
       if (typeof numberValue !== 'undefined' && (!isNaN(numberValue) || stringValue === '')) {
-        const newEvent: NumericInputChangeEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : '' } };
-        onChange && onChange(newEvent);
+        const newEvent = { ...e, target: { ...e.target as HTMLNumericInputElement, value: !isNaN(numberValue) ? numberValue : '' } };
+        onChange && onChange(newEvent as React.ChangeEvent<HTMLNumericInputElement>);
       }
     }
   }, [onChange, maximumFractionDigits]);
