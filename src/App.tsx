@@ -7,11 +7,12 @@ setLocale('nl');
 
 type NumericTextFieldProps = Omit<TextFieldProps, 'variant' | 'onChange' | 'value'> & NumericProps
 
-const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigits, minimumFractionDigits, useGrouping, InputProps, ...props }) => {
+const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFractionDigits, minimumFractionDigits, useGrouping, InputProps, onChange, ...props }) => {
   return (
     <TextField
       variant="outlined"
       margin="normal"
+      onChange={onChange as any}
       {...props}
       InputProps={{
         ...InputProps,
@@ -48,14 +49,14 @@ const CurrencyTextField: React.FC<CurrencyTextFieldProps> = ({ InputProps, ...pr
 const FormattedNumber: React.FC<{ value: number, options?: Intl.NumberFormatOptions }> = ({ value, options }) => <span>{format(value, options)}</span>
 
 const App: React.FC = () => {
-  const [value, setValue] = useState(10 as number | '');
+  const [value, setValue] = useState(10 as number | '' | undefined);
   return (
     <Box height="100%" width="100%" justifyContent="center" alignItems="center" display="flex" flexDirection="column">
       <FormattedNumber value={value || 0} options={{ maximumFractionDigits: 3, useGrouping: false }} />
       <NumericTextField
         label="Numbers"
-        value={value || ''}
-        onChange={e => setValue(e.target.value)}
+        value={typeof value !== 'undefined' ? value : ''}
+        onChange={e => { console.log(e.target.value); setValue(e.target.value) }}
       />
       <CurrencyTextField
         label="Currency"

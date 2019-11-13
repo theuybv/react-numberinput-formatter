@@ -26,12 +26,18 @@ function testValidNumber(value: string, decimalScale?: number) {
   return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
 }
 
+interface HTMLNumericInputElement extends Omit<HTMLInputElement, 'value'> {
+  value?: number | ''
+}
+
+type NumericInputChangeEvent = Omit<React.ChangeEvent<HTMLInputElement>, 'target'> & { target: HTMLNumericInputElement };
+
 export type NumericProps = {
   maximumFractionDigits?: number,
   minimumFractionDigits?: number,
   useGrouping?: boolean,
   value?: number | string,
-  onChange?: (e: React.ChangeEvent<HTMLInputElement> & { target: { value?: number } }) => void
+  onChange?: (e: NumericInputChangeEvent) => void
 }
 
 export type NumericInputProps = {
@@ -40,7 +46,8 @@ export type NumericInputProps = {
   useGrouping: boolean,
   value: number,
   inputRef: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
-} & Omit<React.HTMLProps<HTMLInputElement>, 'value'>
+  onChange?: (e: NumericInputChangeEvent) => void
+} & Omit<React.HTMLAttributes<HTMLInputElement | HTMLTextAreaElement>, 'value' | 'onChange'>
 
 const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur, onFocus, maximumFractionDigits, minimumFractionDigits, useGrouping, ...props }) => {
   const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
@@ -60,8 +67,8 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
     if (isValid || stringValue === '') {
       setValue(stringValue);
       const numberValue = toFloat(e.target.value);
-      if (numberValue && !isNaN(numberValue)) {
-        const newEvent = { ...e, target: { ...e.target, value: numberValue } };
+      if (typeof numberValue !== 'undefined' && (!isNaN(numberValue) || stringValue === '')) {
+        const newEvent: NumericInputChangeEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : '' } };
         onChange && onChange(newEvent);
       }
     }
