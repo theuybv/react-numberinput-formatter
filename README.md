@@ -16,7 +16,7 @@
 import React from 'react';
 import { InputAdornment } from '@material-ui/core';
 import TextField, { TextFieldProps } from '@material-ui/core/TextField';
-import NumericInput, { NumericProps, setLocale } from 'react-numeric-input';
+import NumericInput, { NumericProps, setLocale } from 'react-numberinput-formatter';
 
 setLocale('nl');
 
