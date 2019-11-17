@@ -26,15 +26,18 @@ function testValidNumber(value: string, decimalScale?: number) {
   return new RegExp('^-?\\d*[' + decimalSeparator + ']?\\d' + (decimalScale ? '{0,' + decimalScale + '}' : '*') + '$').test(value);
 }
 
-interface HTMLNumericInputElement extends Omit<HTMLInputElement, 'value'> {
+export interface HTMLNumericInputElement extends Omit<React.HTMLAttributes<HTMLInputElement>, 'value'> {
   value?: number
 }
 
-export interface NumericInputProps extends React.HTMLAttributes<HTMLNumericInputElement> {
+export interface NumericInputProps extends Omit<React.HTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'onBlur' | 'onFocus'> {
   maximumFractionDigits?: number,
   minimumFractionDigits?: number,
   useGrouping?: boolean,
   value?: number,
+  onChange?: (e: React.ChangeEvent<HTMLNumericInputElement>) => void,
+  onBlur?: (e: React.FocusEvent<HTMLNumericInputElement>) => void,
+  onFocus?: (e: React.FocusEvent<HTMLNumericInputElement>) => void,
   inputRef?: string | ((instance: HTMLInputElement | null) => void) | React.RefObject<HTMLInputElement> | null | undefined
 }
 
@@ -57,20 +60,20 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
       setValue(stringValue);
       const numberValue = toFloat(e.target.value);
       if (typeof numberValue !== 'undefined' && (!isNaN(numberValue) || stringValue === '')) {
-        const newEvent = { ...e as unknown as React.ChangeEvent<HTMLNumericInputElement>, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : undefined } };
-        onChange && onChange(newEvent);
+        const newEvent = { ...e, target: { ...e.target, value: !isNaN(numberValue) ? numberValue : undefined } };
+        onChange && onChange(newEvent as unknown as React.ChangeEvent<HTMLNumericInputElement>);
       }
     }
   }, [onChange, maximumFractionDigits]);
 
   const handleBlur = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     value !== '' && setValue(format(toFloat(value), { useGrouping, maximumFractionDigits, minimumFractionDigits }));
-    onBlur && onBlur(e);
+    onBlur && onBlur(e as unknown as React.FocusEvent<HTMLNumericInputElement>);
   }, [onBlur, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
   const handleFocus = useCallback((e: React.FocusEvent<HTMLInputElement>) => {
     value !== '' && useGrouping && setValue(format(toFloat(value), { useGrouping: false, maximumFractionDigits, minimumFractionDigits }));
-    onFocus && onFocus(e);
+    onFocus && onFocus(e as unknown as React.FocusEvent<HTMLNumericInputElement>);
   }, [onFocus, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
   return <input {...props} value={value} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
