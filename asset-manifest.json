@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.js": "/theuybv/react-numberinput-formatter/main.772e2cfdb1cf24405de4.bundle.js",
+    "main.js.map": "/theuybv/react-numberinput-formatter/main.772e2cfdb1cf24405de4.bundle.js.map",
+    "runtime~main.js": "/theuybv/react-numberinput-formatter/runtime~main.772e2cfdb1cf24405de4.bundle.js",
+    "runtime~main.js.map": "/theuybv/react-numberinput-formatter/runtime~main.772e2cfdb1cf24405de4.bundle.js.map",
+    "vendors~main.css": "/theuybv/react-numberinput-formatter/vendors~main.css",
+    "vendors~main.js": "/theuybv/react-numberinput-formatter/vendors~main.772e2cfdb1cf24405de4.bundle.js",
+    "vendors~main.css.map": "/theuybv/react-numberinput-formatter/vendors~main.css.map",
+    "vendors~main.js.map": "/theuybv/react-numberinput-formatter/vendors~main.772e2cfdb1cf24405de4.bundle.js.map",
+    "../.storybook/dist/src/App.d.ts": "/theuybv/react-numberinput-formatter/../.storybook/dist/src/App.d.ts",
+    "../.storybook/dist/src/NumericInput.d.ts": "/theuybv/react-numberinput-formatter/../.storybook/dist/src/NumericInput.d.ts",
+    "../.storybook/dist/src/storybooks/numeric-input.stories.d.ts": "/theuybv/react-numberinput-formatter/../.storybook/dist/src/storybooks/numeric-input.stories.d.ts",
+    "iframe.html": "/theuybv/react-numberinput-formatter/iframe.html",
+    "precache-manifest.239c24ccce6071514ae13de6b963a85e.js": "/theuybv/react-numberinput-formatter/precache-manifest.239c24ccce6071514ae13de6b963a85e.js",
+    "service-worker.js": "/theuybv/react-numberinput-formatter/service-worker.js",
+    "static/media/material-icons.css": "/theuybv/react-numberinput-formatter/static/media/MaterialIcons-Regular.e79bfd88.eot",
+    "static/media/index.css": "/theuybv/react-numberinput-formatter/static/media/roboto-latin-900italic.ebf6d164.woff2"
+  },
+  "entrypoints": [
+    "runtime~main.772e2cfdb1cf24405de4.bundle.js",
+    "vendors~main.css",
+    "vendors~main.772e2cfdb1cf24405de4.bundle.js",
+    "main.772e2cfdb1cf24405de4.bundle.js"
+  ]
+}
