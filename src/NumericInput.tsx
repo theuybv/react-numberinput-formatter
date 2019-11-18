@@ -76,7 +76,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
     onFocus && onFocus(e as unknown as React.FocusEvent<HTMLNumericInputElement>);
   }, [onFocus, value, useGrouping, maximumFractionDigits, minimumFractionDigits]);
 
-  return <input {...props} value={value} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
+  return <input pattern="\\d*" {...props} value={value} onChange={handleChange} onBlur={handleBlur} onFocus={handleFocus} ref={inputRef} />
 };
 
 NumericInput.defaultProps = {

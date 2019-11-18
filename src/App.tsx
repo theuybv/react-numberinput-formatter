@@ -22,7 +22,6 @@ export const NumericTextField: React.FC<NumericTextFieldProps> = ({ maximumFract
           maximumFractionDigits,
           minimumFractionDigits,
           useGrouping,
-          pattern: '\\d*',
           ...InputProps ? InputProps.inputProps : {}
         }
       }}
