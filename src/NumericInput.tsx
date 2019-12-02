@@ -45,7 +45,7 @@ const NumericInput: React.FC<NumericInputProps> = ({ inputRef, onChange, onBlur,
   const [value, setValue] = useState(props.value ? format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }) : '');
 
   useEffect(() => {
-    const floatValue = parseFloat(value);
+    const floatValue = toFloat(value);
     if (!isNaN(floatValue) && floatValue !== 0 && floatValue !== props.value && props.value + '' !== '' && typeof props.value !== 'undefined') {
       setValue(format(props.value, { useGrouping, maximumFractionDigits, minimumFractionDigits }));
     } else if (typeof props.value !== 'undefined' && props.value + '' === '') {
