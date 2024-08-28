@@ -77,6 +77,6 @@
     "storybook-readme": "^5.0.8",
     "typeface-roboto": "0.0.75",
     "typescript": "3.7.2",
-    "webpack": "4.41.0"
+    "webpack": "5.94.0"
   }
 }
